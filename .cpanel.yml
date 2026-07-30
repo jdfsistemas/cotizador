@@ -1,4 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/grupohue/public_html/cotizador
+    - export DEPLOYPATH=/home/grupohue/public_html/
     - /bin/cp -R * $DEPLOYPATH
