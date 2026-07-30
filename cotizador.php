@@ -77,7 +77,7 @@ require_once "auth.php";
 
             <div class="field-grid">
               <label>
-                Agente
+                AGENTE
                 <select name="agent">
                   <option value="FEDEX">FEDEX</option>
                   <option value="DHL">DHL</option>
