@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
         btnLogout.onclick = function () {
 
             sessionStorage.clear();
-            location.href = "index.html";
+            location.href = "index.php";
 
         };
 
