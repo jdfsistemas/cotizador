@@ -1,0 +1,720 @@
+:root{
+    color-scheme: light;
+    --bg:#eef3f9;
+    --panel:#ffffff;
+    --ink:#000000;
+    --muted:#004597;
+    --line:#d6e0ee;
+
+    /* Colores corporativos */
+    --primary:#004597;
+    --primary-dark:#003a80;
+    --secondary:#00A3B7;
+    --secondary-dark:#008ea0;
+    --soft:#eaf7fa;
+    --success:#009f6b;
+    --danger:#d83b3b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell{
+
+    width:100%;
+    max-width:1400px;
+    margin:0 auto;
+    padding:24px;
+}
+
+.quote-header{
+
+    width:80%;
+    max-width:1200px;
+    margin:0 auto 20px;
+    padding:28px 32px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#004597 0%,#00A3B7 100%);
+    box-shadow:0 12px 30px rgba(0,69,151,.25);
+}
+
+.quote-header h1 {
+    margin: 4px 0 12px;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.05;
+    letter-spacing: 0;
+    color: #ffffff;
+}
+
+.quote-header p {
+    margin: 4px 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  color:#BCEFFF !important;
+  letter-spacing:2px;
+}
+
+.summary-total {
+  display: flex;
+  min-height: 160px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  border-radius: 8px;
+  background: var(--soft);
+  border: 1px solid #c7e8df;
+}
+
+.summary-total span,
+.summary-total small {
+  color: var(--muted);
+}
+
+.summary-total strong {
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.05;
+}
+
+.layout-grid{
+
+    display:grid;
+    grid-template-columns:minmax(760px,1fr) 300px;
+    gap:20px;
+    align-items:start;
+    width:80%;
+    margin:0 auto;
+
+}
+
+.panel,
+.quote-preview{
+    width:80%;
+    margin:25px auto;
+}
+
+.panel {
+  padding: 20px;
+}
+
+.panel-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-title h2,
+.quote-preview h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 9px 10px;
+  color: var(--ink);
+  background: #fff !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid rgba(0, 69, 151, 0.2) !important;
+  border-color: var(--primary) !important;
+}
+
+.section-divider {
+  height: 1px;
+  margin: 20px 0;
+  background: var(--line);
+}
+
+.items {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.items-list {
+  display: grid;
+  gap: 10px;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 116px 58px minmax(150px, 1fr) 104px 126px 126px;
+  gap: 10px;
+  align-items: center;
+}
+
+.item-row output {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: flex-end;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 9px 10px;
+  background: #fbfcff;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.item-head {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.add-item-button {
+  justify-self: start;
+}
+
+.primary-button,
+.ghost-button,
+.ghost-link {
+  min-height: 38px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.primary-button {
+  background: var(--accent);
+  color: #fff;
+}
+
+.primary-button:hover {
+  background: var(--accent-dark);
+}
+
+.ghost-button,
+.ghost-link {
+  background: #fff;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.small-button {
+  min-height: 30px;
+  padding: 5px 10px;
+}
+
+.detail-panel {
+  margin-top: 20px;
+}
+
+.detail-summary {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.detail-summary p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.result-actions {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.save-status {
+  min-height: 18px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.totals-list {
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.totals-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.totals-list dt {
+  color: var(--muted);
+}
+
+.totals-list dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+}
+
+.totals-list .final-row {
+  margin-top: 8px;
+  padding: 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.totals-list .final-row dt {
+  color: #dbe3f1;
+}
+
+.quote-preview {
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.preview-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  background: #fbfcff;
+  border-bottom: 1px solid var(--line);
+}
+
+.preview-top p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.preview-top strong {
+  color: var(--ink);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+/* ======================================================== */
+/* CONTROL DE BORDES: RECUADROS POR BLOQUE COMPLETOS        */
+/* ======================================================== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+th, td {
+  padding: 10px 12px; /* Reducido levemente para ahorrar altura */
+  text-align: left;
+  border: none !important;
+}
+
+/* Cabecera Principal */
+thead tr th,
+table tr:first-child th {
+  background-color: #004597 !important;
+  color: #ffffff !important;
+  font-size: 12px;
+  text-transform: uppercase;
+  border: 1px solid #004597 !important;
+}
+
+/* Fila de título de sección (TROQUEL...) */
+.section-row td {
+  background: #f4f6f9 !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  text-transform: uppercase;
+  border-top: 1px solid #004597 !important;
+  border-left: 1px solid #004597 !important;
+  border-right: 1px solid #004597 !important;
+  border-bottom: 1px solid #004597 !important;
+}
+
+/* Filas de cuerpo: Paredes laterales de la caja */
+table tbody tr td {
+  border-left: 1px solid #004597 !important;
+  border-right: 1px solid #004597 !important;
+}
+
+/* Líneas divisorias verticales internas */
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(3) {
+  border-right: 1px solid #004597 !important;
+}
+
+/* Base de cada troquel */
+table tbody tr:has(+ .section-row) td,
+table tr:last-child td {
+  border-bottom: 1px solid #004597 !important;
+}
+
+td:last-child,
+td:nth-child(3),
+td:nth-child(4),
+th:last-child,
+th:nth-child(3),
+th:nth-child(4) {
+  text-align: right;
+}
+
+.notes {
+  display: grid;
+  gap: 6px;
+  padding: 14px 20px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.notes p {
+  margin: 0;
+}
+
+/* Cabecera corporativa */
+.company-header {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 12px 25px !important; /* Más compacto en interfaz */
+}
+
+.company-logo {
+    width: 230px !important;
+    height: auto !important;
+    background: #fff !important;
+    padding: 8px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 20px rgba(28, 195, 201, 0.15) !important;
+    flex-shrink: 0 !important;
+}
+
+.company-info {
+    flex-grow: 1 !important;          
+    text-align: right !important;       
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;   
+}
+
+.company-info h1,
+.company-info p {
+    text-align: right !important;
+    margin: 2px 0 !important;
+    padding: 0 !important;
+    width: auto !important; 
+}
+
+.company-info p {
+    color: rgba(255, 255, 255, .90) !important;
+}
+
+.company-info h1 {
+    margin: 4px 0 !important;
+    color: #fff !important;
+}
+
+/* Ajustes Interfaz */
+.results-panel {
+  border-radius: 8px !important;
+}
+
+#saveQuoteButton {
+  background-color: #004597 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-weight: bold !important;
+}
+
+#saveQuoteButton:hover {
+  background-color: #003373 !important;
+}
+
+.results-panel a.ghost-link {
+  border: 1px solid #004597 !important;
+  color: #004597 !important;
+  border-radius: 6px !important;
+}
+
+.results-panel .totals-list .final-row {
+  border-radius: 6px !important;
+  overflow: hidden !important;
+}
+
+.quote-preview,
+div:has(> .company-header) {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.quote-preview .preview-top {
+  width: 100% !important;
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+  border-bottom: 2px solid #004597 !important;
+}
+
+@media (max-width: 1080px) {
+  .quote-header,
+  .layout-grid,
+  .preview-top {
+    grid-template-columns: 1fr;
+  }
+  .results-panel {
+    order: -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .app-shell {
+    width: min(100% - 20px, 1180px);
+    padding-top: 10px;
+  }
+  .quote-header,
+  .panel {
+    padding: 16px;
+  }
+  .field-grid,
+  .item-row {
+    grid-template-columns: 1fr;
+  }
+  .panel-title {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+/* ======================================================== */
+/* IMPRESIÓN FORZADA RESTRICCIONES DE 1 SOLA PÁGINA         */
+/* ======================================================== */
+@media print {
+
+  @page {
+    size: letter;
+    margin: 8mm 10mm;
+  }
+
+  /* =======================================
+     OCULTAR MENÚ Y BOTÓN AL IMPRIMIR
+     ======================================= */
+  #btnMenu,
+  #menu {
+    display: none !important;
+  }
+
+  html,
+  body {
+    height: 99%;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    background: #fff;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .app-shell {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* ...el resto de tu código... */
+  .layout-grid,
+  .summary-total,
+  .ghost-button,
+  .primary-button,
+  .panel,
+  .section-divider {
+    display: none !important; /* Desactiva la sección de inputs por completo */
+  }
+
+.quote-header,
+.quote-preview{
+    width: 85% !important;
+    max-width: 90% !important;
+    margin: 0 auto !important;
+
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
+    border: 2px solid #004597 !important;
+    overflow: hidden !important;
+    page-break-inside: avoid !important;
+}
+
+.quote-header{
+    margin-bottom: 20px !important;
+}
+
+.company-header{
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+
+  .company-logo {
+    width: 180px !important; /* Achicado en el PDF para ganar altura */
+    padding: 6px !important;
+  }
+
+  .company-info h1 {
+    font-size: 18px !important;
+    margin: 2px 0 !important;
+  }
+
+  .company-info p {
+    font-size: 10px !important;
+    margin: 1px 0 !important;
+  }
+
+  .quote-preview {
+    margin-top: 20px;
+  }
+
+  /* Compactar Datos de la Proforma (Facturar a, Entregar en) */
+  .preview-top {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    padding: 8px 14px !important;
+    background: #ffffff !important;
+  }
+
+  .preview-top h2 {
+    font-size: 14px !important;
+    margin: 0 !important;
+  }
+
+  .preview-top p {
+    font-size: 11px !important;
+    margin: 2px 0 0 !important;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+
+  table {
+    min-width: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  /* Altura ultra compacta para las celdas en el PDF */
+  th, td {
+    padding: 5px 6px !important;
+    font-size: 10.5px !important;
+    line-height: 1.2 !important;
+  }
+
+  th:first-child, td:first-child { width: 10%; }
+  th:nth-child(2), td:nth-child(2) { width: 48%; }
+  th:nth-child(3), td:nth-child(3) { width: 21%; }
+  th:nth-child(4), td:nth-child(4) { width: 21%; }
+
+  thead tr th,
+  table tr:first-child th {
+    background-color: #004597 !important;
+    color: #ffffff !important;
+    border: 1px solid #004597 !important;
+  }
+
+  .section-row td {
+    background-color: #f4f6f9 !important;
+    border: 1px solid #004597 !important;
+    font-size: 11px !important;
+  }
+
+  table tbody tr td {
+    border-left: 1px solid #004597 !important;
+    border-right: 1px solid #004597 !important;
+  }
+
+  td:nth-child(1), td:nth-child(2), td:nth-child(3) {
+    border-right: 1px solid #004597 !important;
+  }
+
+  table tbody tr:has(+ .section-row) td,
+  table tr:last-child td {
+    border-bottom: 1px solid #004597 !important;
+  }
+
+  /* Notas legales reducidas de tamaño en impresión */
+  .notes {
+    padding: 8px 12px !important;
+    font-size: 9.5px !important;
+    gap: 3px !important;
+  }
+}

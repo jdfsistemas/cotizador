@@ -1,0 +1,281 @@
+/* ==============================
+   HUELLA GLOBAL - LOGIN
+================================ */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:linear-gradient(135deg,#004597 0%,#00A3B7 100%);
+
+    height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+
+}
+
+.login-container{
+
+    width: 70vw;
+    max-width: 1250px;
+
+    height: 85vh;
+
+    background: #fff;
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    display: grid;
+    grid-template-columns: 1fr 480px;
+
+    box-shadow: 0 25px 60px rgba(0,0,0,.25);
+
+}
+/*=========================================
+ PANEL IZQUIERDO
+=========================================*/
+
+.left-panel{
+
+    background:#f8fbff;
+
+    color:#004597;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:60px;
+
+    text-align:center;
+
+}
+
+.logo{
+
+    width:320px;
+
+    margin-bottom:40px;
+
+}
+
+.left-panel h1{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+.left-panel h2{
+
+    font-size:20px;
+
+    font-weight:400;
+
+    margin-bottom:25px;
+
+}
+
+.left-panel p{
+
+    width:90%;
+
+    font-size:16px;
+
+    line-height:28px;
+
+    opacity:.9;
+
+}
+
+/*=========================================
+ PANEL DERECHO
+=========================================*/
+
+.right-panel{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#f8fbff;
+
+}
+
+.login-card{
+
+    width:360px;
+
+}
+
+.login-card h2{
+
+    font-size:34px;
+
+    color:#004597;
+
+    margin-bottom:10px;
+
+}
+
+.subtitle{
+
+    color:#00A3B7;
+
+    margin-bottom:35px;
+
+}
+
+.form-group{
+
+    margin-bottom:20px;
+
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#00A3B7;
+
+}
+
+.form-group input{
+
+    width:100%;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    border:1px solid #d7d7d7;
+
+    font-size:15px;
+
+    transition:.25s;
+
+}
+
+.form-group input:focus{
+
+    outline:none;
+
+    border-color:#00A3B7;
+
+    box-shadow:0 0 0 4px rgba(0,148,214,.15);
+
+}
+
+button{
+
+    width:100%;
+
+    border:none;
+
+    padding:16px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    background:#004597;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+    margin-top:10px;
+
+}
+
+button:hover{
+
+    background:#003f8c;
+
+    transform:translateY(-2px);
+
+}
+
+#mensajeError{
+
+    margin-top:18px;
+
+    color:#d60000;
+
+    text-align:center;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    min-height:20px;
+
+}
+
+/*=========================================
+ RESPONSIVE
+=========================================*/
+
+@media(max-width:900px){
+
+.login-container{
+
+    width:95%;
+
+    height:auto;
+
+    grid-template-columns:1fr;
+
+}
+
+.left-panel{
+
+    padding:40px;
+
+}
+
+.logo{
+
+    width:220px;
+
+}
+
+.login-card{
+
+    width:90%;
+
+    padding:40px 0;
+
+}
+
+}

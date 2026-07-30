@@ -1,0 +1,249 @@
+/* ============================
+   BOTÓN HAMBURGUESA
+============================ */
+
+.btn-menu{
+
+    position:fixed;
+
+    top:15px;
+    left:15px;
+
+    width:50px;
+    height:50px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#00a3b7;
+
+    color:#FFFFFF;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    z-index:10001;
+
+    transition:.30s;
+
+}
+
+.btn-menu:hover{
+
+    background:#00A3B7;
+
+}
+
+
+/* ============================
+   MENÚ LATERAL
+============================ */
+
+.menu{
+
+    position:fixed;
+
+    top:0;
+
+    left:-260px;
+
+    width:250px;
+
+    height:100vh;
+
+    background:#FFFFFF;
+
+    border-right:1px solid #E6E6E6;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    transition:left .35s ease;
+
+    box-shadow:4px 0 15px rgba(0,0,0,.18);
+
+    z-index:10000;
+
+}
+
+
+/* Cuando se abre */
+
+.menu.abierto{
+
+    left:0;
+
+}
+
+
+/* ============================
+   OPCIONES
+============================ */
+
+.menu-opciones{
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:90px 15px 20px 15px;
+
+    gap:12px;
+
+}
+
+
+.btn-opcion{
+
+    display:flex;
+
+    align-items:center;
+
+    width:100%;
+
+    min-height:48px;
+
+    padding:14px 18px;
+
+    text-decoration:none;
+
+    color:#fff;
+
+    background:#00a3b7;
+
+    border-radius:12px;
+
+    font-family:Helvetica,Arial,sans-serif;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    transition:.25s;
+
+}
+
+
+.btn-opcion:hover{
+
+    background:#004597;
+
+    color:#FFFFFF;
+
+
+    transform:translateX(6px);
+
+}
+
+
+.btn-opcion.activo{
+
+    background:#00A3B7;
+
+    border-color:#00A3B7;
+
+    color:#FFFFFF;
+
+}
+
+
+/* ============================
+   FOOTER
+============================ */
+
+.menu-footer{
+
+    padding:20px;
+
+    border-top:1px solid #EEEEEE;
+
+}
+
+
+#nombreUsuario{
+
+    display:block;
+
+    margin-bottom:15px;
+
+    color:#004597;
+
+    font-weight:bold;
+
+}
+
+
+/* ============================
+   BOTÓN CERRAR SESIÓN
+============================ */
+
+#btnLogout{
+
+    width:calc(100% - 30px);
+
+    margin:15px;
+
+    padding:13px;
+
+    background:#00A3B7;
+
+    color:#FFFFFF;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+
+#btnLogout:hover{
+
+    background:#004597;
+
+}
+
+
+/* ============================
+   RESPONSIVE
+============================ */
+
+@media(max-width:768px){
+
+    .menu{
+
+        width:230px;
+
+        left:-240px;
+
+    }
+
+}
+
+/* Desplazar el contenido cuando el menú está abierto */
+
+.contenedor,
+.app-shell{
+
+    transition: margin-left .35s ease;
+
+}
+
+.contenedor.menu-abierto,
+.app-shell.menu-abierto{
+
+    margin-left:250px;
+
+}
