@@ -28,7 +28,7 @@ require_once "auth.php";
         <div class="panel-title">
           <h2>Historial</h2>
           <div class="header-actions">
-            <a class="ghost-link" href="/">Nueva cotizacion</a>
+            <a class="ghost-link" href="cotizador.php">Nueva cotizacion</a>
             <button class="primary-button" type="button" id="refreshButton">Actualizar</button>
           </div>
         </div>

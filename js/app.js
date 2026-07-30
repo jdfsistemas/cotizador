@@ -73,29 +73,12 @@ const freightUsd = (quantity) => {
   return range ? range.multiplier * freightBaseUsd : 0;
 };
 
-const poHuellaCode = (numeroForzado = null) => {
-  const nombre = textValue("billTo");
-  if (!nombre) return "";
+const poHuellaCode = () => {
+  const poInput = form.elements.poHuella;
 
-  const palabras = nombre.split(/\s+/);
-  let iniciales = "";
+  if (!poInput) return "";
 
-  if (palabras.length === 1) {
-    iniciales = palabras[0].substring(0, 2).toUpperCase();
-  } else {
-    iniciales = palabras[0].charAt(0).toUpperCase() + palabras[1].charAt(0).toUpperCase();
-  }
-
-  const idCliente = "17";
-  
-  let numeroActual = numeroForzado;
-  if (numeroActual === null) {
-    numeroActual = parseInt(localStorage.getItem("consecutivo_po_global") || "3", 10);
-  }
-  
-  const consecutivo = String(numeroActual).padStart(4, "0");
-
-  return iniciales + idCliente + consecutivo;
+  return poInput.value.trim();
 };
 
 const dhlHandlingUsd = (kocherUnitTotal) => {
@@ -496,6 +479,166 @@ document.querySelector("#resetButton").addEventListener("click", () => {
 });
 
 document.querySelector("#printButton").addEventListener("click", () => window.print());
+
+// =====================================================
+// BÚSQUEDA DE CLIENTES
+// =====================================================
+
+const billToInput = document.getElementById("billTo");
+const clientResults = document.getElementById("clientResults");
+const poHuellaInput = document.getElementById("poHuella");
+
+let clientSearchTimeout = null;
+
+if (billToInput && clientResults) {
+
+  billToInput.addEventListener("input", () => {
+
+    const texto = billToInput.value.trim();
+
+    // Mantener tu comportamiento actual:
+    // Entregar en = Cliente
+    if (form.elements.deliverTo) {
+      form.elements.deliverTo.value = billToInput.value;
+    }
+
+    clearTimeout(clientSearchTimeout);
+
+    // Si hay menos de 2 caracteres, no buscamos
+    if (texto.length < 2) {
+      clientResults.innerHTML = "";
+      clientResults.style.display = "none";
+
+      // Si borró el cliente, también limpiamos PO
+      if (poHuellaInput) {
+        poHuellaInput.value = "";
+      }
+
+      calculate();
+      return;
+    }
+
+    clientSearchTimeout = setTimeout(() => {
+      buscarClientes(texto);
+    }, 250);
+
+  });
+
+}
+
+
+async function buscarClientes(texto) {
+
+  try {
+
+    const response = await fetch(
+      "api/clientes.php?q=" + encodeURIComponent(texto)
+    );
+
+    if (!response.ok) {
+      throw new Error("Error consultando clientes");
+    }
+
+    const clientes = await response.json();
+
+    mostrarResultadosClientes(clientes);
+
+  } catch (error) {
+
+    console.error("Error buscando clientes:", error);
+
+    clientResults.innerHTML = "";
+    clientResults.style.display = "none";
+  }
+
+}
+
+
+function mostrarResultadosClientes(clientes) {
+
+  clientResults.innerHTML = "";
+
+  if (!clientes.length) {
+
+    clientResults.innerHTML = `
+      <div class="client-no-results">
+        No se encontraron clientes
+      </div>
+    `;
+
+    clientResults.style.display = "block";
+
+    return;
+  }
+
+  clientes.forEach((cliente) => {
+
+    const opcion = document.createElement("div");
+
+    opcion.className = "client-result";
+
+    opcion.innerHTML = `
+      <strong>${escapeHtml(cliente.cliente)}</strong>
+    `;
+
+    opcion.addEventListener("click", () => {
+
+      seleccionarCliente(cliente);
+
+    });
+
+    clientResults.appendChild(opcion);
+
+  });
+
+  clientResults.style.display = "block";
+}
+
+
+function seleccionarCliente(cliente) {
+
+  // Nombre del cliente
+  billToInput.value = cliente.cliente;
+
+  // Mantener "Entregar en" igual al cliente
+  if (form.elements.deliverTo) {
+    form.elements.deliverTo.value = cliente.cliente;
+  }
+
+  // Consecutivo a 3 dígitos
+  const consecutivo =
+    String(cliente.consecutivo).padStart(3, "0");
+
+  // Iniciales + consecutivo
+  const po =
+    String(cliente.iniciales).toUpperCase() +
+    consecutivo;
+
+  // Colocar PO
+  if (poHuellaInput) {
+    poHuellaInput.value = po;
+  }
+
+  // Ocultar resultados
+  clientResults.innerHTML = "";
+  clientResults.style.display = "none";
+
+  // Actualizar vista previa
+  setText("previewBillTo", cliente.cliente);
+  setText("previewPoHuella", po);
+
+  calculate();
+}
+
+
+function escapeHtml(text) {
+
+  const div = document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+}
 
 // Inicialización de la carga de la página
 setInitialDate();

@@ -36,18 +36,29 @@ require_once "auth.php";
             </div>
 
             <div class="field-grid">
-              <label>
-                Cliente / facturar a
-                <input name="billTo" placeholder="Nombre del cliente">
-              </label>
+            <label class="client-search-wrapper">
+              Cliente / facturar a
+            <input
+            name="billTo"
+            id="billTo"
+            placeholder="Nombre del cliente"
+            autocomplete="off"
+  >
+
+  <div id="clientResults" class="client-results"></div>
+</label>
               <label>
                 Entregar en
                 <input name="deliverTo">
               </label>
               <label>
                 PO
-                <input name="poHuella" READONLY value="poHuella">
-              </label>
+              <input
+              name="poHuella"
+              id="poHuella"
+              readonly
+    >
+</label>
               <label>
                 ATT
                 <input name="att" placeholder="Nombre del contacto">
