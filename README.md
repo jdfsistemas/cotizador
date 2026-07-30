@@ -45,3 +45,5 @@ Use el boton `Guardar cotizacion` para almacenar la cotizacion completa en SQLit
 Para consultar por web las cotizaciones guardadas, abra:
 
 `http://127.0.0.1:8000/cotizaciones.html`
+
+//Instrucivo de la aplicación
