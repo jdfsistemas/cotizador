@@ -366,12 +366,13 @@ const saveQuote = async () => {
     }, 400);
 
   } catch (error) {
-    // --- ERROR DE SERVIDOR: Cambiamos a rojo ---
-    if (saveStatus) {
-      saveStatus.style.color = "#e53e3e";
-      saveStatus.textContent = "Abra la app desde http://127.0.0.1:8000 para guardar.";
-    }
+  console.error("ERROR AL GUARDAR:", error);
+
+  if (saveStatus) {
+    saveStatus.style.color = "#e53e3e";
+    saveStatus.textContent = "Error al guardar la cotización: " + error.message;
   }
+}
 };
 
 const quoteSection = (key, items, totals) => {
@@ -441,6 +442,7 @@ const quoteSection = (key, items, totals) => {
     </tr>
     ${productRows}
     ${totalsRows}
+    ${mensajeCromo}
   `;
 };
 

@@ -1,27 +1,30 @@
 <?php
 
-require_once "config.php";
+// 1. Cargar la configuración usando la ruta absoluta exacta del archivo
+require_once __DIR__ . "/config.php";
 
-$host = "127.0.0.1"; // Es más estable usar 127.0.0.1 que localhost en PDO
-$usuario = "grupohue_admin";
+// 2. Parámetros de conexión
+$host     = "127.0.0.1";
+$usuario  = "grupohue_admin";
 $password = "Huellag2026$";
-$bd = "grupohue_cotizacioneshg";
+$bd       = "grupohue_cotizacioneshg";
 
 try {
 
+    // 3. Creación de la instancia PDO
     $conexion = new PDO(
         "mysql:host=$host;dbname=$bd;charset=utf8mb4",
         $usuario,
         $password
     );
 
-    // Mostrar errores de PDO
+    // Configurar PDO para lanzar excepciones en caso de error
     $conexion->setAttribute(
         PDO::ATTR_ERRMODE,
         PDO::ERRMODE_EXCEPTION
     );
 
-    // Retornar resultados como arreglo asociativo
+    // Devolver los resultados por defecto como arreglos asociativos
     $conexion->setAttribute(
         PDO::ATTR_DEFAULT_FETCH_MODE,
         PDO::FETCH_ASSOC
@@ -29,14 +32,14 @@ try {
 
 } catch (PDOException $e) {
 
-    // Enviar encabezado JSON y código de error 500
+    // Si ocurre un error de conexión, se responde en formato JSON estándar
     header('Content-Type: application/json; charset=utf-8');
     http_response_code(500);
 
     echo json_encode([
-        'status'  => 'error',
-        'message' => 'Error de conexión a la base de datos: ' . $e->getMessage()
-    ]);
+        'ok'    => false,
+        'error' => 'Error de conexión a la base de datos: ' . $e->getMessage()
+    ], JSON_UNESCAPED_UNICODE);
 
-    exit; // Detiene la ejecución limpia
+    exit;
 }
