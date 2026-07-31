@@ -188,7 +188,7 @@ require_once "auth.php";
                 <dd id="taxTotal">$0</dd>
               </div>
               <div class="final-row">
-                <dt>Total aprox.</dt>
+                <dt>Total</dt>
                 <dd id="total">$0</dd>
               </div>
             </dl>
