@@ -105,7 +105,7 @@ require_once "auth.php";
               <div id="itemsList" class="items-list">
                 <div class="item-row quote-item" data-initial="true">
                   <select name="type1" data-field="type" aria-label="Tipo de troquel 1">
-                    <option value="">Seleccione...</option>
+                    <option value="">Seleccione Tipo</option>
                     <option value="standard">Universal</option>
                     <option value="extended">3L vida extendida</option>
                     <option value="chrome">Cromo</option>
@@ -131,7 +131,7 @@ require_once "auth.php";
                 </div>
                 <div class="item-row quote-item" data-initial="true">
                   <select name="type3" data-field="type" aria-label="Tipo de troquel 3">
-                    <option value="">Seleccione...</option>
+                    <option value="">Seleccione Tipo</option>
                     <option value="standard">Universal</option>
                     <option value="extended">3L vida extendida</option>
                     <option value="chrome">Cromo</option>
