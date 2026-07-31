@@ -3,5 +3,5 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/grupohue/public_html/cotizador
     - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp -a . $DEPLOYPATH
+    - /usr/bin/rsync -av --exclude='.git*' ./ $DEPLOYPATH
     - /bin/chmod 755 $DEPLOYPATH/api
