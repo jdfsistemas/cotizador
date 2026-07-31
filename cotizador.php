@@ -96,7 +96,7 @@ require_once "auth.php";
             <div class="items">
               <div class="item-row item-head">
                 <span>Tipo</span>
-                <span>Cant.</span>
+                <span>Cantidad</span>
                 <span>Producto</span>
                 <span>USD Kocher</span>
                 <span>Precio proforma USD</span>
