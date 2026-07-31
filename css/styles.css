@@ -427,6 +427,15 @@ th:nth-child(4) {
   margin: 0;
 }
 
+.cromo-nota td {
+    color: #d60000 !important;
+    font-weight: bold;
+    text-align: left;
+    padding: 8px 10px !important;
+    background: #fff5f5;
+    border-left: 1px solid #004597;
+    border-right: 1px solid #004597;
+}
 /* Cabecera corporativa */
 .company-header {
     display: flex !important;

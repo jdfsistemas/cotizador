@@ -377,7 +377,13 @@ const saveQuote = async () => {
 const quoteSection = (key, items, totals) => {
   const plan = planDefaults[key];
   const freightAndHandling = totals.freightTotal + totals.handlingTotal;
-
+  const mensajeCromo = key === "chrome" ? `
+    <tr class="cromo-nota">
+      <td colspan="4">
+        De ser aprobada la calidad cromo son 6 días para fabricación; después de ingresado pedido puede tardar máximo 12 días en la entrega.
+      </td>
+    </tr>
+  ` : "";
   // Si NO hay ítems en este troquel, generamos filas ocultas con display: none
   // Esto mantiene el DOM del mismo tamaño estructural sin mostrar texto basura
   if (!items.length) {
