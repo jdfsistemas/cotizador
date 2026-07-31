@@ -1,0 +1,11 @@
+DirectoryIndex index.php
+
+RewriteEngine On
+
+# Si entran a /cotizador/ debe cargar index.php
+RewriteRule ^$ index.php [L]
+
+# No mostrar extensiones .php en la URL
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]
