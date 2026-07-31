@@ -4,3 +4,4 @@ deployment:
     - export DEPLOYPATH=/home/grupohue/public_html/cotizador
     - /bin/mkdir -p $DEPLOYPATH
     - /bin/cp -a . $DEPLOYPATH
+    - /bin/chmod 755 $DEPLOYPATH/api
