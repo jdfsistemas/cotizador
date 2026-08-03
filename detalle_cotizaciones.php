@@ -7,38 +7,57 @@ require_once "auth.php";
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cotizaciones guardadas</title>
+    <title>Cotizaciones Guardadas</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.11/css/dataTables.bootstrap5.min.css">
+    <!-- Estilos propios -->
     <link rel="stylesheet" href="css/styles.css">
-  </head>
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/datatable.css">
+</head>
   <body>
+    <?php include __DIR__ . '/includes/menu.php'; ?>
     <main class="app-shell">
       <section class="quote-header">
         <div class="company-header">
         <img src="img/Logo Color 1.png" alt="Huella Global" class="company-logo">
-          <h1>Cotizaciones guardadas</h1>
-        </div>
-        <div class="summary-total">
-          <span>Registros</span>
-          <strong id="quotesCount">0</strong>
-          <small>Ultimas 50 cotizaciones</small>
+          <h1>COTIZACIONES GUARDADAS</h1>
         </div>
       </section>
+      <section class="panel shadow-sm rounded-4 p-4">
+      <div class="panel-title mb-4">
 
-      <section class="panel">
-        <div class="panel-title">
-          <h2>Historial</h2>
-          <div class="header-actions">
-            <a class="ghost-link" href="cotizador.php">Nueva cotizacion</a>
-            <button class="primary-button" type="button" id="refreshButton">Actualizar</button>
-          </div>
-        </div>
+    <input
+    type="text"
+    id="buscarCotizacion"
+    class="form-control"
+    placeholder="Buscar"
+    style="width:300px;">
+
+    <div class="header-actions">
+
+        <a href="cotizador.php"
+           class="btn btn-success">
+            + Nueva Cotización
+        </a>
+
+        <button
+            id="refreshButton"
+            class="btn btn-primary">
+            Actualizar
+        </button>
+      </div>
+  </div>
+
         <p id="quotesStatus" class="save-status" aria-live="polite"></p>
-        <div class="table-wrap">
-          <table class="quotes-table">
+        <div class="table-responsive">
+        <table id="tablaCotizaciones" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Fecha</th>
+                <th>N° Cotización HG</th>
+                <th>Fecha cotización</th>
                 <th>Cliente</th>
                 <th>PO Huella</th>
                 <th>Total USD</th>
@@ -60,6 +79,10 @@ require_once "auth.php";
       </section>
     </main>
 
-    <script src="cotizaciones.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.11/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.11/js/dataTables.bootstrap5.min.js"></script>
+    <script src="js/cotizaciones.js"></script>
+    <script src="js/menu.js"></script>
   </body>
 </html>

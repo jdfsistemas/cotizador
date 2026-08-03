@@ -6,7 +6,7 @@
 
     <div class="menu-opciones">
 
-        <a class="btn-opcion" href="index.php">
+        <a class="btn-opcion" href="cotizador.php">
             Inicio
         </a>
 
@@ -14,7 +14,7 @@
             Nueva Cotización
         </a>
 
-        <a class="btn-opcion" href="panel_cotizaciones.php">
+        <a class="btn-opcion" href="detalle_cotizaciones.php">
             Historial
         </a>
 

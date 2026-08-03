@@ -77,11 +77,66 @@ try {
         ":usuario_id"    => $usuario
     ]);
 
-    echo json_encode([
-        "ok" => true,
-        "id" => $conexion->lastInsertId(),
-        "mensaje" => "Cotización guardada exitosamente"
+    $cotizacionNum = $conexion->lastInsertId();
+
+foreach ($items as $item) {
+
+    $sqlDetalle = "
+        INSERT INTO cotizaciones_detalle
+        (
+            cotizacion_num,
+            cliente,
+            fecha_solicitud,
+            producto,
+            detalle,
+            calidad_troquel,
+            valor_kocher,
+            valor_hg
+        )
+        VALUES
+        (
+            :cotizacion_num,
+            :cliente,
+            :fecha_solicitud,
+            :producto,
+            :detalle,
+            :calidad_troquel,
+            :valor_kocher,
+            :valor_hg
+        )
+    ";
+
+    $stmtDetalle = $conexion->prepare($sqlDetalle);
+
+    $stmtDetalle->execute([
+
+        ":cotizacion_num"  => $cotizacionNum,
+
+        ":cliente"         => $cliente,
+
+        ":fecha_solicitud" => $fecha,
+
+        ":producto"        => $item["product"] ?? "",
+
+        ":detalle"         => $item["product"] ?? "",
+
+        ":calidad_troquel" => strtoupper(
+            $item["type"] ?? ""
+        ),
+
+        ":valor_kocher"    => $item["kocherUsd"] ?? 0,
+
+        ":valor_hg"        => $item["hgcUsd"] ?? 0
+
     ]);
+
+}
+
+   echo json_encode([
+    "ok" => true,
+    "id" => $cotizacionNum,
+    "mensaje" => "Cotización guardada exitosamente"
+]);
 
 } catch (Throwable $e) {
     http_response_code(500);

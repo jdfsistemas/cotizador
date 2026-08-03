@@ -44,7 +44,7 @@ select {
 
 .quote-header{
 
-    width:80%;
+    width:90%;
     max-width:1200px;
     margin:0 auto 20px;
     padding:28px 32px;
@@ -56,10 +56,11 @@ select {
 
 .quote-header h1 {
     margin: 4px 0 12px;
-    font-size: clamp(28px, 4vw, 44px);
+    font-size: clamp(24px, 4vw, 44px);
     line-height: 1.05;
     letter-spacing: 0;
     color: #ffffff;
+    align-items: center;
 }
 
 .quote-header p {
@@ -110,7 +111,7 @@ select {
 
 .panel,
 .quote-preview{
-    width:80%;
+    width:90%;
     margin:25px auto;
 }
 
@@ -129,6 +130,7 @@ select {
 .panel-title h2,
 .quote-preview h2 {
   margin: 0;
+  color: #004597;
   font-size: 20px;
   letter-spacing: 0;
 }
@@ -411,7 +413,7 @@ td:nth-child(4),
 th:last-child,
 th:nth-child(3),
 th:nth-child(4) {
-  text-align: right;
+  text-align: center;
 }
 
 .notes {
@@ -726,4 +728,13 @@ div:has(> .company-header) {
     font-size: 9.5px !important;
     gap: 3px !important;
   }
+}
+
+.cotizacion-hg{
+    text-align:center !important;
+}
+
+.cotizacion-hg strong{
+    color:#004597;
+    font-weight:700;
 }

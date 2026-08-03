@@ -1,119 +1,726 @@
+let tabla;
 const quotesRows = document.querySelector("#quotesRows");
-const quotesCount = document.querySelector("#quotesCount");
+const formatDate = (date) => {if (!date) return "";
+    const [yyyy, mm, dd] = date.split("-");
+
+    return `${dd}/${mm}/${yyyy}`;
+
+};
 const quotesStatus = document.querySelector("#quotesStatus");
 const detailPanel = document.querySelector("#detailPanel");
 const quoteDetail = document.querySelector("#quoteDetail");
 
 const usd = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
 });
 
-const escapeHtml = (value) => String(value ?? "")
-  .replaceAll("&", "&amp;")
-  .replaceAll("<", "&lt;")
-  .replaceAll(">", "&gt;")
-  .replaceAll('"', "&quot;")
-  .replaceAll("'", "&#039;");
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+// =====================================================
+// CARGAR COTIZACIONES
+// =====================================================
 
 const loadQuotes = async () => {
-  quotesStatus.textContent = "Cargando...";
-  const response = await fetch("/api/quotes");
-  const data = await response.json();
 
-  if (!response.ok) {
-    quotesStatus.textContent = data.error || "No se pudieron cargar las cotizaciones.";
-    return;
-  }
+    quotesStatus.textContent = "Cargando...";
 
-  quotesCount.textContent = data.quotes.length;
-  quotesRows.innerHTML = data.quotes.map((quote) => `
-    <tr>
-      <td>${quote.id}</td>
-      <td>${escapeHtml(quote.quote_date)}</td>
-      <td>${escapeHtml(quote.client)}</td>
-      <td>${escapeHtml(quote.po_huella)}</td>
-      <td>${usd.format(quote.total_usd)}</td>
-      <td>${escapeHtml(quote.created_at)}</td>
-      <td><button class="ghost-button small-button" type="button" data-id="${quote.id}">Ver</button></td>
-    </tr>
-  `).join("");
-  quotesStatus.textContent = data.quotes.length ? "" : "No hay cotizaciones guardadas.";
+    try {
+
+        const response = await fetch("api/listar_cotizaciones.php");
+        const data = await response.json();
+
+        if (!response.ok) {
+            quotesStatus.textContent =
+                data.error || "No se pudieron cargar las cotizaciones.";
+            return;
+        }
+
+        // Si DataTables ya existe, destruirla
+        if ($.fn.DataTable.isDataTable("#tablaCotizaciones")) {
+            $("#tablaCotizaciones").DataTable().destroy();
+        }
+
+        // Limpiar tabla
+        quotesRows.innerHTML = "";
+
+        // =================================================
+        // GENERAR FILAS
+        // =================================================
+
+        data.quotes.forEach((quote) => {
+
+            quotesRows.innerHTML += `
+                <tr>
+
+                    <td class="cotizacion-hg">
+                  <strong>
+                   #${escapeHtml(quote.id)}
+                  </strong>
+                  </td>
+
+                    <td>
+                        ${formatDate(quote.quote_date)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(quote.client)}
+                    </td>
+
+                    <td
+                      class="po-huella">
+                       ${escapeHtml(quote.po_huella)}
+                      </span>
+                    </td>
+
+                    <td>
+                        <strong>
+                            USD ${usd.format(quote.total_usd)}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${formatDate(quote.quote_date)}
+                    </td>
+
+                    <td class="text-center">
+
+                        <button
+                        class="btn btn-outline-primary btn-sm btn-ver-cotizacion"
+                        type="button"
+                        data-id="${quote.id}"
+                        title="Ver detalle">
+                        <i class="bi bi-eye"></i>
+                        Ver
+                        </button>
+
+                    </td>
+
+                </tr>
+            `;
+
+        });
+
+
+        // =================================================
+        // DATATABLE
+        // =================================================
+
+        tabla = $("#tablaCotizaciones").DataTable({
+          
+
+            pageLength: 25,
+
+            order: [
+                [0, "desc"]
+            ],
+
+            responsive: true,
+
+            dom:
+            `rt<'row mt-3'<'col-md-6'l i><'col-md-6'p>>`,
+
+            language: {
+
+                url:
+                    "https://cdn.datatables.net/plug-ins/2.3.3/i18n/es-ES.json",
+
+                lengthMenu:
+                    "Mostrar _MENU_",
+
+                info:
+                    "Mostrando _START_ a _END_ de _TOTAL_"
+
+            }
+
+        });
+
+        document
+        .getElementById("buscarCotizacion")
+        .addEventListener("keyup", function () {
+
+        tabla.search(this.value).draw();
+
+        });
+
+        $("#tablaCotizaciones_filter")
+       .appendTo("#contenedorBuscador");
+
+
+        quotesStatus.textContent =
+            data.quotes.length
+                ? ""
+                : "No hay cotizaciones guardadas.";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        quotesStatus.textContent =
+            "Error cargando las cotizaciones.";
+
+    }
+
 };
+
+
+// =====================================================
+// DETALLE DE COTIZACIÓN
+// =====================================================
 
 const renderDetail = (quote) => {
-  const payload = quote.payload;
-  const sections = payload.sections
-    .filter((section) => section.items.length)
-    .map((section) => `
-      <h3>${escapeHtml(section.sectionTitle)}</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Cant.</th>
-              <th>Producto</th>
-              <th>Valor unitario</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${section.items.map((item) => `
-              <tr>
-                <td>${item.qty}</td>
-                <td>${escapeHtml(item.product)}</td>
-                <td>${usd.format(item.hgcUsd)}</td>
-                <td>${usd.format(item.totalUsd)}</td>
-              </tr>
-            `).join("")}
-            <tr><td></td><td>Flete</td><td></td><td>${usd.format(section.totals.freightTotal + section.totals.handlingTotal)}</td></tr>
-            <tr><td></td><td><strong>Subtotal</strong></td><td></td><td><strong>${usd.format(section.totals.subtotal)}</strong></td></tr>
-            <tr><td></td><td><strong>IVA</strong></td><td></td><td><strong>${usd.format(section.totals.taxTotal)}</strong></td></tr>
-            <tr><td></td><td><strong>Total aprox.</strong></td><td></td><td><strong>${usd.format(section.totals.total)}</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-    `).join("");
 
-  quoteDetail.innerHTML = `
-    <div class="detail-summary">
-      <p><strong>Cliente:</strong> ${escapeHtml(payload.billTo)}</p>
-      <p><strong>PO Huella:</strong> ${escapeHtml(payload.poHuella)}</p>
-      <p><strong>Fecha:</strong> ${escapeHtml(payload.date)}</p>
-      <p><strong>Agente:</strong> ${escapeHtml(payload.agent)}</p>
-      <p><strong>Total:</strong> ${usd.format(payload.totals.total)}</p>
-    </div>
-    ${sections}
-  `;
-  detailPanel.hidden = false;
-  detailPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    // =================================================
+    // PRODUCTOS
+    // =================================================
+
+    const itemsHtml = quote.items.length
+
+        ? quote.items.map((item) => `
+
+            <tr>
+
+                <td class="text-center">
+                    <span class="qty-badge">
+                        ${escapeHtml(item.qty)}
+                    </span>
+                </td>
+
+                <td>
+                    <strong>
+                        ${escapeHtml(item.product)}
+                    </strong>
+                </td>
+
+                <td>
+                    <span class="type-badge">
+                        ${escapeHtml(item.type)}
+                    </span>
+                </td>
+
+                <td class="text-end">
+                    USD ${usd.format(item.hgcUsd)}
+                </td>
+
+                <td class="text-end fw-semibold">
+                    USD ${usd.format(item.totalUsd)}
+                </td>
+
+            </tr>
+
+        `).join("")
+
+        : `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="text-center text-muted py-4">
+
+                    No hay productos registrados.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+    // =================================================
+    // DETALLE COMPLETO
+    // =================================================
+
+    quoteDetail.innerHTML = `
+
+        <div class="quote-detail-container">
+
+
+            <!-- ===================================== -->
+            <!-- ENCABEZADO -->
+            <!-- ===================================== -->
+
+            <div class="detail-main-header">
+
+                <div>
+
+                    <span class="detail-label">
+                        COTIZACIÓN
+                    </span>
+
+                    <h2>
+                        #${escapeHtml(quote.id)}
+                    </h2>
+
+                </div>
+
+
+                <div class="detail-po">
+
+                    <span>
+                        PO HUELLA
+                    </span>
+
+                    <strong>
+                        ${escapeHtml(quote.po)}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ===================================== -->
+            <!-- INFORMACIÓN GENERAL -->
+            <!-- ===================================== -->
+
+            <div class="detail-section">
+
+                <div class="detail-section-title">
+
+                    <h3>
+                        Información general
+                    </h3>
+
+                </div>
+
+
+                <div class="detail-info-grid">
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Cliente
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(quote.cliente)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Entregar en
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(quote.entregar_en || "-")}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Atención
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(quote.att || "-")}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Fecha
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(quote.fecha)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Agente
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(quote.agente)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Tiempo de entrega
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(quote.tiempo_entrega || "-")}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- ===================================== -->
+            <!-- CONDICIONES COMERCIALES -->
+            <!-- ===================================== -->
+
+            <div class="detail-section">
+
+                <div class="detail-section-title">
+
+                    <h3>
+                        Condiciones comerciales
+                    </h3>
+
+                </div>
+
+
+                <div class="commercial-grid">
+
+
+                    <div>
+
+                        <span>
+                            TRM
+                        </span>
+
+                        <strong>
+                            ${usd.format(quote.trm)}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            IVA
+                        </span>
+
+                        <strong>
+                            ${quote.iva ?? 0}%
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Fecha de registro
+                        </span>
+
+                        <strong>
+                            ${escapeHtml(quote.fecha_creacion || "-")}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- ===================================== -->
+            <!-- DETALLE DE PRODUCTOS -->
+            <!-- ===================================== -->
+
+            <div class="detail-section">
+
+                <div class="detail-section-title">
+
+                    <h3>
+                        Detalle de la cotización
+                    </h3>
+
+                    <span class="items-count">
+
+                        ${quote.items.length}
+
+                        ${quote.items.length === 1
+                            ? "producto"
+                            : "productos"}
+
+                    </span>
+
+                </div>
+
+
+                <div class="detail-table-wrapper">
+
+                    <table class="detail-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="text-center">
+                                    Cant.
+                                </th>
+
+                                <th>
+                                    Producto
+                                </th>
+
+                                <th>
+                                    Tipo
+                                </th>
+
+                                <th class="text-end">
+                                    Valor unitario
+                                </th>
+
+                                <th class="text-end">
+                                    Total
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            ${itemsHtml}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- ===================================== -->
+            <!-- RESUMEN -->
+            <!-- ===================================== -->
+
+            <div class="detail-section">
+
+                <div class="detail-section-title">
+
+                    <h3>
+                        Resumen de la cotización
+                    </h3>
+
+                </div>
+
+
+                <div class="totals-card">
+
+
+                    <div class="total-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            USD ${usd.format(quote.subtotal)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span>
+                            Flete
+                        </span>
+
+                        <strong>
+                            USD ${usd.format(quote.flete)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span>
+                            Manejo
+                        </span>
+
+                        <strong>
+                            USD ${usd.format(quote.manejo)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span>
+                            Impuesto / IVA
+                        </span>
+
+                        <strong>
+                            USD ${usd.format(quote.impuesto)}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="total-row total-final">
+
+                        <span>
+                            TOTAL
+                        </span>
+
+                        <strong>
+                            USD ${usd.format(quote.total)}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+
+    // Mostrar panel
+
+    detailPanel.hidden = false;
+
+
+    // Ir al detalle
+
+    detailPanel.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+    });
+
 };
+
+
+// =====================================================
+// CARGAR DETALLE
+// =====================================================
 
 const loadQuoteDetail = async (id) => {
-  quotesStatus.textContent = "Cargando detalle...";
-  const response = await fetch(`/api/quotes/${id}`);
-  const data = await response.json();
 
-  if (!response.ok) {
-    quotesStatus.textContent = data.error || "No se pudo cargar el detalle.";
-    return;
-  }
+    quotesStatus.textContent =
+        "Cargando detalle...";
 
-  quotesStatus.textContent = "";
-  renderDetail(data.quote);
+    try {
+
+        const response =
+            await fetch(
+                `api/ver_cotizacion.php?id=${encodeURIComponent(id)}`
+            );
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            quotesStatus.textContent =
+                data.error ||
+                "No se pudo cargar el detalle.";
+
+            return;
+
+        }
+
+
+        quotesStatus.textContent = "";
+
+        renderDetail(data.quote);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        quotesStatus.textContent =
+            "Error cargando el detalle.";
+
+    }
+
 };
 
+
+// =====================================================
+// CLICK EN VER
+// =====================================================
+
 quotesRows.addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-id]");
-  if (!button) return;
-  loadQuoteDetail(button.dataset.id);
+
+    const button =
+        event.target.closest(
+            "button[data-id]"
+        );
+
+    if (!button) return;
+
+    loadQuoteDetail(
+        button.dataset.id
+    );
+
 });
 
-document.querySelector("#refreshButton").addEventListener("click", loadQuotes);
-document.querySelector("#closeDetailButton").addEventListener("click", () => {
-  detailPanel.hidden = true;
-});
+
+// =====================================================
+// CERRAR DETALLE
+// =====================================================
+
+document
+    .querySelector("#closeDetailButton")
+    .addEventListener("click", () => {
+
+        detailPanel.hidden = true;
+
+        quoteDetail.innerHTML = "";
+
+    });
+
+
+// =====================================================
+// ACTUALIZAR
+// =====================================================
+
+document
+    .querySelector("#refreshButton")
+    .addEventListener(
+        "click",
+        loadQuotes
+    );
+
+
+// =====================================================
+// INICIAR
+// =====================================================
 
 loadQuotes();
