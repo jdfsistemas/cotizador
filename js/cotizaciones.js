@@ -137,7 +137,7 @@ const loadQuotes = async () => {
                     "Mostrar _MENU_",
 
                 info:
-                    "Mostrando _START_ a _END_ de _TOTAL_"
+                    "Mostrando _START_ a _END_"
 
             }
 
