@@ -73,7 +73,10 @@ require_once "auth.php";
       <section class="panel detail-panel" id="detailPanel" hidden>
         <div class="panel-title">
           <h2>Detalle</h2>
-          <button class="ghost-button" type="button" id="closeDetailButton">Cerrar</button>
+          <button class="btn btn-outline-secondary btn-sm" type="button" id="closeDetailButton">
+          <i class="bi bi-x-lg"></i>
+          Cerrar
+          </button>
         </div>
         <div id="quoteDetail"></div>
       </section>

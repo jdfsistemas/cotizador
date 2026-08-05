@@ -2,6 +2,42 @@ const form = document.querySelector("#quoteForm");
 const quoteRows = document.querySelector("#quoteRows");
 const itemsList = document.querySelector("#itemsList");
 const saveStatus = document.querySelector("#saveStatus");
+const companyHeader =
+  document.querySelector("#companyHeader");
+
+const colombiaHeader = `
+  <img
+    src="img/Logo Color 1.png"
+    alt="Huella Global Colombia"
+    class="company-logo"
+  >
+
+  <div class="company-info">
+    <h1>HUELLA GLOBAL COLOMBIA S.A.S</h1>
+    <p>NIT. 901754865-8</p>
+    <p>Guarne - Antioquia</p>
+    <p>troqueles@huellaglobal.com</p>
+    <p>comercial@huellaglobal.com</p>
+    <p>301 386 8493 · 302 351 8101</p>
+  </div>
+`;
+
+const corporationHeader = `
+  <img
+    src="img/logos huella global Corporation.png"
+    alt="Huella Global Corporation"
+    class="company-logo"
+  >
+
+  <div class="company-info">
+    <h1>HUELLA GLOBAL CORPORATION</h1>
+    <p>17765 SW 20th Street - Miramar, FL.</p>
+    <p>comercial@huellaglobal.com</p>
+    <p>troqueles@huellaglobal.com</p>
+    <p>+57 301 386 8493 · 302 351 8101</p>
+
+  </div>
+`;
 
 let itemCounter = 3;
 
@@ -20,15 +56,31 @@ const planDefaults = {
   },
 };
 
-const freightBaseUsd = 72;
 
-const freightRanges = [
-  { min: 1, max: 4, multiplier: 1 },
-  { min: 5, max: 8, multiplier: 2 },
-  { min: 9, max: 12, multiplier: 3 },
-  { min: 13, max: 16, multiplier: 4 },
-  { min: 17, max: 20, multiplier: 5 },
-];
+const freightConfig = {
+
+  COLOMBIA: {
+    iva: 19,
+    base: 72,
+    rango: 4,
+    manejo: true
+  },
+
+  ECUADOR: {
+    iva: 0,
+    base: 145,
+    rango: 5,
+    manejo: false
+  },
+
+  REPUBLICA_DOMINICANA: {
+    iva: 0,
+    base: 90,
+    rango: 5,
+    manejo: false
+  }
+
+};
 
 const fedexTrmBase = 3600;
 const fedexFuelUsd = 11.944444444444445;
@@ -50,9 +102,8 @@ const dhlHandlingRanges = [
   { min: 500.01, max: Infinity, usd: 53 },
 ];
 
+
 const usd = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
@@ -78,15 +129,24 @@ const hgcPriceUsd = (kocherUsd) => {
 };
 
 const freightUsd = (quantity) => {
-  const range = freightRanges.find(
-    (item) =>
-      quantity >= item.min &&
-      quantity <= item.max
-  );
 
-  return range
-    ? range.multiplier * freightBaseUsd
-    : 0;
+  const pais =
+    form.elements.country
+      ? form.elements.country.value
+      : "COLOMBIA";
+
+  const config =
+    freightConfig[pais];
+
+  if (!config || quantity <= 0) {
+    return 0;
+  }
+
+  const bloques =
+    Math.ceil(quantity / config.rango);
+
+  return bloques * config.base;
+
 };
 
 const poHuellaCode = () => {
@@ -133,6 +193,18 @@ const handlingUsd = (
   fuelKocherTotal
 ) => {
 
+  const pais =
+    form.elements.country
+      ? form.elements.country.value
+      : "COLOMBIA";
+
+  const config =
+    freightConfig[pais];
+
+  if (!config?.manejo) {
+    return 0;
+  }
+
   const base =
     agent === "DHL"
       ? dhlHandlingUsd(kocherUnitTotal)
@@ -144,7 +216,8 @@ const handlingUsd = (
       : 0;
 
   return base + fuel;
-};
+
+};  
 
 const setText = (id, value) => {
 
@@ -469,6 +542,11 @@ const buildQuoteData = () => {
 
   return {
 
+    country:
+      form.elements.country
+        ? form.elements.country.value
+        : "",
+
     billTo:
       textValue("billTo"),
 
@@ -688,7 +766,7 @@ const calculate = () => {
 
         hgcEl.textContent =
           kocherUsd > 0
-            ? usd.format(hgcUsd)
+            ? `USD ${usd.format(hgcUsd)}`
             : "USD 0.00";
       }
 
@@ -828,19 +906,15 @@ const saveQuote = async () => {
 
     const response =
       await fetch(
-        "guardar_cotizacion.php",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body:
-            JSON.stringify(payload),
-        }
-      );
+    "api/guardar_cotizacion.php",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    }
+);
 
 
     // =====================================================
@@ -1075,12 +1149,20 @@ const quoteSection = (
           <tr>
             <td>${item.qty}</td>
             <td>${item.product}</td>
-            <td>${usd.format(item.hgcUsd)}</td>
-            <td>${usd.format(item.totalUsd)}</td>
+            <td>USD ${usd.format(item.hgcUsd)}</td>
+            <td>USD ${usd.format(item.totalUsd)}</td>
           </tr>
         `
       )
       .join("");
+
+const pais =
+  form.elements.country
+    ? form.elements.country.value
+    : "COLOMBIA";
+
+const esColombia =
+  pais === "COLOMBIA";
 
 
   const totalsRows = `
@@ -1089,7 +1171,7 @@ const quoteSection = (
       <td>Flete y Manejo</td>
       <td></td>
       <td>
-        ${usd.format(
+        USD ${usd.format(
           freightAndHandling
         )}
       </td>
@@ -1103,27 +1185,33 @@ const quoteSection = (
       <td></td>
       <td>
         <strong>
-          ${usd.format(
+         USD ${usd.format(
             totals.subtotal
           )}
         </strong>
       </td>
     </tr>
 
-    <tr>
-      <td></td>
-      <td>
-        <strong>IVA</strong>
-      </td>
-      <td></td>
-      <td>
-        <strong>
-          ${usd.format(
-            totals.taxTotal
-          )}
-        </strong>
-      </td>
-    </tr>
+   ${
+  esColombia
+    ? `
+      <tr>
+        <td></td>
+        <td>
+          <strong>IVA</strong>
+        </td>
+        <td></td>
+        <td>
+          <strong>
+            USD ${usd.format(
+              totals.taxTotal
+            )}
+          </strong>
+        </td>
+      </tr>
+    `
+    : ""
+  }
 
     <tr>
       <td></td>
@@ -1133,7 +1221,7 @@ const quoteSection = (
       <td></td>
       <td>
         <strong>
-          ${usd.format(
+          USD ${usd.format(
             totals.total
           )}
         </strong>
@@ -1660,6 +1748,51 @@ function escapeHtml(
     text;
 
   return div.innerHTML;
+}
+
+const actualizarConfiguracionPais = () => {
+
+  const pais =
+    form.elements.country
+      ? form.elements.country.value
+      : "COLOMBIA";
+
+  const config =
+    freightConfig[pais];
+
+  if (
+    config &&
+    form.elements.taxRate
+  ) {
+    form.elements.taxRate.value =
+      config.iva;
+  }
+
+  if (companyHeader) {
+
+    if (pais === "COLOMBIA") {
+
+        companyHeader.innerHTML = colombiaHeader;
+
+    } else {
+
+        companyHeader.innerHTML = corporationHeader;
+
+    }
+
+}
+
+  calculate();
+
+};
+
+if (form.elements.country) {
+
+  form.elements.country.addEventListener(
+    "change",
+    actualizarConfiguracionPais
+  );
+
 }
 
 

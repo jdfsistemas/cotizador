@@ -16,7 +16,7 @@ require_once "auth.php";
       <?php include __DIR__ . '/includes/menu.php'; ?>
       <main class="app-shell">
         <section class="quote-header">
-          <div class="company-header">
+          <div class="company-header" id="companyHeader">
             <img src="img/Logo Color 1.png" alt="Huella Global" class="company-logo">
             <div class="company-info">
               <h1>HUELLA GLOBAL COLOMBIA S.A.S</h1>
@@ -37,41 +37,66 @@ require_once "auth.php";
             </div>
 
             <div class="field-grid">
-            <label class="client-search-wrapper">
-              Cliente / facturar a
-            <input
-            name="billTo"
-            id="billTo"
-            placeholder="Nombre del cliente"
-            autocomplete="off"
-  >
 
-  <div id="clientResults" class="client-results"></div>
-</label>
+              <!-- PAÍS -->
+              <label>
+                País de la cotización
+                <select name="country" id="country">
+                  <option value="COLOMBIA" selected>Colombia</option>
+                  <option value="ECUADOR">Ecuador</option>
+                  <option value="REPUBLICA_DOMINICANA">República Dominicana</option>
+                </select>
+              </label>
+
+              <!-- CLIENTE -->
+              <label class="client-search-wrapper">
+                Cliente / facturar a
+                <input
+                  name="billTo"
+                  id="billTo"
+                  placeholder="Nombre del cliente"
+                  autocomplete="off">
+
+                <div id="clientResults" class="client-results"></div>
+              </label>
+
+              <!-- ENTREGAR EN -->
               <label>
                 Entregar en
                 <input name="deliverTo">
               </label>
+
+              <!-- PO -->
               <label>
                 PO
-              <input
-              name="poHuella"
-              id="poHuella"
-              readonly
-    >
-</label>
+                <input
+                  name="poHuella"
+                  id="poHuella"
+                  readonly>
+              </label>
+
+              <!-- ATT -->
               <label>
                 ATT
-                <input name="att" placeholder="Nombre del contacto">
+                <input
+                  name="att"
+                  placeholder="Nombre del contacto">
               </label>
+
+              <!-- FECHA -->
               <label>
                 Fecha
                 <input name="date" type="date">
               </label>
+
+              <!-- TIEMPO DE ENTREGA -->
               <label>
                 Tiempo de entrega
-                <input name="deliveryTime" value="6 DIAS HABILES">
+                <input
+                  name="deliveryTime"
+                  value="6 DIAS HABILES">
               </label>
+
             </div>
 
             <div class="section-divider"></div>

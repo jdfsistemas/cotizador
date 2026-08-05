@@ -11,7 +11,7 @@ header("Content-Type: application/json; charset=utf-8");
 
 try {
     // Requerir la conexión
-    require_once __DIR__ . "/api/conexion.php";
+    require_once __DIR__ . "/conexion.php";
 
     // Leer el payload que viene de JS
     $rawInput = file_get_contents("php://input");
@@ -22,6 +22,7 @@ try {
     }
 
     // Datos extraídos del JSON
+    $pais         = $data["country"] ?? "";
     $po           = $data["poHuella"] ?? "";
     $cliente      = $data["billTo"] ?? "";
     $entregarEn   = $data["deliverTo"] ?? "";
@@ -29,16 +30,13 @@ try {
     $fecha        = $data["date"] ?? "";
     $tiempoEntrega = $data["deliveryTime"] ?? "";
     $agente       = $data["agent"] ?? "";
-
     $trm          = floatval($data["quoteTrm"] ?? 0);
     $iva          = floatval($data["taxRate"] ?? 0);
-
     $subtotal     = floatval($data["totals"]["subtotal"] ?? 0);
     $flete        = floatval($data["totals"]["freightTotal"] ?? 0);
     $manejo       = floatval($data["totals"]["handlingTotal"] ?? 0);
     $impuesto     = floatval($data["totals"]["taxTotal"] ?? 0);
     $total        = floatval($data["totals"]["total"] ?? 0);
-
     $items        = $data["items"] ?? [];
     $detalle      = json_encode($items, JSON_UNESCAPED_UNICODE);
 
@@ -81,11 +79,24 @@ try {
 
 foreach ($items as $item) {
 
+    $tipoTroquel = match ($item["type"] ?? "") {
+
+    "standard" => "UNIVERSAL",
+
+    "extended" => "3L VIDA EXTENDIDA",
+
+    "chrome" => "CROMO",
+
+    default => ""
+
+    };
+
     $sqlDetalle = "
         INSERT INTO cotizaciones_detalle
         (
             cotizacion_num,
             cliente,
+            pais,
             fecha_solicitud,
             producto,
             detalle,
@@ -97,6 +108,7 @@ foreach ($items as $item) {
         (
             :cotizacion_num,
             :cliente,
+            :pais,
             :fecha_solicitud,
             :producto,
             :detalle,
@@ -114,15 +126,15 @@ foreach ($items as $item) {
 
         ":cliente"         => $cliente,
 
+        ":pais" => $pais,
+
         ":fecha_solicitud" => $fecha,
 
         ":producto"        => $item["product"] ?? "",
 
         ":detalle"         => $item["product"] ?? "",
 
-        ":calidad_troquel" => strtoupper(
-            $item["type"] ?? ""
-        ),
+        ":calidad_troquel" => $tipoTroquel,
 
         ":valor_kocher"    => $item["kocherUsd"] ?? 0,
 

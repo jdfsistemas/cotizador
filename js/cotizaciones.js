@@ -150,12 +150,9 @@ const loadQuotes = async () => {
         tabla.search(this.value).draw();
 
         });
+        
 
-        $("#tablaCotizaciones_filter")
-       .appendTo("#contenedorBuscador");
-
-
-        quotesStatus.textContent =
+            quotesStatus.textContent =
             data.quotes.length
                 ? ""
                 : "No hay cotizaciones guardadas.";
