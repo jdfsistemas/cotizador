@@ -10,7 +10,7 @@ try {
     $sql = "
         SELECT *
         FROM cotizaciones
-        ORDER BY cotizacion_num DESC
+        ORDER BY cotizacion_num ASC
         LIMIT 50
     ";
 

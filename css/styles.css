@@ -378,14 +378,16 @@ table tr:first-child th {
 
 /* Fila de título de sección (TROQUEL...) */
 .section-row td {
-  background: #f4f6f9 !important;
-  color: #000000 !important;
-  font-weight: bold !important;
-  text-transform: uppercase;
-  border-top: 1px solid #004597 !important;
-  border-left: 1px solid #004597 !important;
-  border-right: 1px solid #004597 !important;
-  border-bottom: 1px solid #004597 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+    text-transform: uppercase;
+    text-align: left !important;
+    padding-left: 12px !important;
+    border-top: none !important;
+    border-left: 1px solid #004597 !important;
+    border-right: 1px solid #004597 !important;
+    border-bottom: 1px solid #004597 !important;
 }
 
 /* Filas de cuerpo: Paredes laterales de la caja */
@@ -557,6 +559,20 @@ div:has(> .company-header) {
     align-items: stretch;
     flex-direction: column;
   }
+}
+
+/* Tipo de troquel */
+.type-row td {
+    text-align: left !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    color: #000 !important;
+    background: #ffffff !important;
+    border-top: none !important;
+    border-bottom: 1px solid #004597 !important;
+    border-left: 1px solid #004597 !important;
+    border-right: 1px solid #004597 !important;
+    padding: 4px 8px !important;
 }
 
 /* ======================================================== */

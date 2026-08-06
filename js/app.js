@@ -274,13 +274,21 @@ const itemData = () => {
       fieldNumberValue(row, "qty");
 
     return {
-      type: fieldValue(row, "type"),
-      qty,
-      product: fieldValue(row, "product").trim(),
-      kocherUsd,
-      hgcUsd,
-      totalUsd: hgcUsd * qty,
-    };
+  type: fieldValue(row, "type"),
+
+  typeLabel:
+    row.querySelector('[data-field="type"]')
+      .options[
+        row.querySelector('[data-field="type"]')
+          .selectedIndex
+      ].text,
+
+  qty,
+  product: fieldValue(row, "product").trim(),
+  kocherUsd,
+  hgcUsd,
+  totalUsd: hgcUsd * qty,
+};
   });
 };
 
@@ -1001,7 +1009,13 @@ const saveQuote = async () => {
     // IMPRIMIR
     // =====================================================
 
-    window.print();
+    console.log(data);
+    console.log(data.id);
+
+    window.open(
+    `api/imprimir_cotizacion.php?id=${data.id}`,
+    "_blank"
+);
 
 
     // =====================================================
@@ -1401,12 +1415,17 @@ document
   );
 
 
-document
-  .querySelector("#printButton")
-  .addEventListener(
+const printButton =
+  document.querySelector("#printButton");
+
+if (printButton) {
+
+  printButton.addEventListener(
     "click",
     () => window.print()
   );
+
+}
 
 
 // =====================================================

@@ -37,8 +37,12 @@ try {
     $manejo       = floatval($data["totals"]["handlingTotal"] ?? 0);
     $impuesto     = floatval($data["totals"]["taxTotal"] ?? 0);
     $total        = floatval($data["totals"]["total"] ?? 0);
-    $items        = $data["items"] ?? [];
-    $detalle      = json_encode($items, JSON_UNESCAPED_UNICODE);
+    $items = $data["items"] ?? [];
+    $sections = $data["sections"] ?? [];
+    $detalle = json_encode([
+    "items" => $items,
+    "sections" => $sections
+    ], JSON_UNESCAPED_UNICODE);
 
     // Usuario por defecto si no hay sesión
     $usuario      = $_SESSION["usuario_id"] ?? 1;

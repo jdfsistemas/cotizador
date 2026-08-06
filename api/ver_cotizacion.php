@@ -28,30 +28,70 @@ try {
 
     $quote = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $sqlPais = "
+    SELECT pais
+    FROM cotizaciones_detalle
+    WHERE cotizacion_num = :id
+    LIMIT 1
+";
+
+$stmtPais = $conexion->prepare($sqlPais);
+
+$stmtPais->execute([
+    ':id' => $id
+]);
+
+$detalle = $stmtPais->fetch(PDO::FETCH_ASSOC);
+
     if (!$quote) {
         throw new Exception("Cotización no encontrada.");
     }
 
     $payload = json_decode(
-        $quote['detalle_json'] ?? '{}',
+        $quote['detalle_json'] ?? '[]',
         true
     );
 
     echo json_encode([
-    'quote' => [
-        'id' => $quote['cotizacion_num'],
-        'cliente' => $quote['cliente'],
-        'po' => ($quote['po'] ?? '') . ($quote['cotizacion_num'] ?? ''),
-        'fecha' => $quote['fecha'],
-        'agente' => $quote['agente'],
-        'subtotal' => $quote['subtotal'],
-        'flete' => $quote['flete'],
-        'manejo' => $quote['manejo'],
-        'impuesto' => $quote['impuesto'],
-        'total' => $quote['total'],
-        'items' => $payload
-    ]
-], JSON_UNESCAPED_UNICODE);
+        'quote' => [
+
+            'id' => $quote['cotizacion_num'],
+
+            'cliente' => $quote['cliente'],
+
+            'country' => $detalle['pais'] ?? '',
+
+            'po' => ($quote['po'] ?? '') .
+                    ($quote['cotizacion_num'] ?? ''),
+
+            'entregar_en' => $quote['entregar_en'],
+
+            'att' => $quote['att'],
+
+            'fecha' => $quote['fecha'],
+
+            'tiempo_entrega' => $quote['tiempo_entrega'],
+
+            'agente' => $quote['agente'],
+
+            'trm' => $quote['trm'],
+
+            'iva' => $quote['iva'],
+
+            'subtotal' => $quote['subtotal'],
+
+            'flete' => $quote['flete'],
+
+            'manejo' => $quote['manejo'],
+
+            'impuesto' => $quote['impuesto'],
+
+            'total' => $quote['total'],
+
+            'items' => $payload
+
+        ]
+    ], JSON_UNESCAPED_UNICODE);
 
 } catch (Exception $e) {
 
@@ -60,5 +100,4 @@ try {
     echo json_encode([
         'error' => $e->getMessage()
     ], JSON_UNESCAPED_UNICODE);
-
 }

@@ -61,7 +61,6 @@ require_once "auth.php";
                 <th>Cliente</th>
                 <th>PO Huella</th>
                 <th>Total USD</th>
-                <th>Guardada</th>
                 <th>Accion</th>
               </tr>
             </thead>
@@ -69,22 +68,71 @@ require_once "auth.php";
           </table>
         </div>
       </section>
-
-      <section class="panel detail-panel" id="detailPanel" hidden>
-        <div class="panel-title">
-          <h2>Detalle</h2>
-          <button class="btn btn-outline-secondary btn-sm" type="button" id="closeDetailButton">
-          <i class="bi bi-x-lg"></i>
-          Cerrar
-          </button>
-        </div>
-        <div id="quoteDetail"></div>
-      </section>
     </main>
+
+    
+    <div
+    class="modal fade"
+    id="quoteModal"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Detalle de Cotización
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div
+                class="modal-body"
+                id="quoteDetailModal">
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="printQuoteBtn">
+
+                    <i class="bi bi-printer"></i>
+                    Imprimir
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Cerrar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.11/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.11/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/cotizaciones.js"></script>
     <script src="js/menu.js"></script>
   </body>
