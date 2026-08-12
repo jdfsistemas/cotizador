@@ -53,19 +53,51 @@ require_once "auth.php";
 
         <p id="quotesStatus" class="save-status" aria-live="polite"></p>
         <div class="table-responsive">
-        <table id="tablaCotizaciones" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
-            <thead>
-              <tr>
-                <th>N° Cotización HG</th>
-                <th>Fecha cotización</th>
-                <th>Cliente</th>
-                <th>PO Huella</th>
-                <th>Total USD</th>
-                <th>Accion</th>
-              </tr>
-            </thead>
-            <tbody id="quotesRows"></tbody>
-          </table>
+        <table id="tablaCotizaciones"
+       class="table table-striped table-hover table-bordered align-middle"
+       style="width:100%">
+
+    <thead>
+        <tr>
+
+            <th>COD</th>
+            <th>NO. COTIZACION HG</th>
+            <th>PAIS</th>
+            <th>ENTREGA OK AL CLIENTE</th>
+            <th>CLIENTE</th>
+            <th>FECHA SOLICITUD</th>
+            <th>PRODUCTO</th>
+            <th>DETALLE</th>
+            <th>FECHA ENVIO COTIZACION</th>
+            <th>SEGUIMIENTO 1</th>
+            <th>SEGUIMIENTO 2</th>
+            <th>FECHA APROBACION</th>
+            <th>FECHA ENVIO FABRICACION</th>
+            <th>FECHA DESPACHADA</th>
+            <th>CALIDAD</th>
+            <th>VALOR K+B</th>
+            <th>VALOR HG</th>
+            <th>ORDEN SERVICIO K+B ID</th>
+            <th>N° PLACA K+B TOOL ID</th>
+            <th>GUIA</th>
+            <th>TRANSPORTADOR</th>
+            <th>FACTURA FLETE</th>
+            <th>FACTURA K+B</th>
+            <th>CORREO ENVIADO A FACTURAR</th>
+            <th>ORDEN COMPRA</th>
+            <th>FACTURA HG</th>
+            <th>OBSERVACIONES FACTURA HG</th>
+            <th>FECHA RECIBIO CLIENTE</th>
+            <th>OBSERVACIONES</th>
+            <th>DIAS SOL-COT</th>
+            <th>DIAS PEDIDO-ENTREGA</th>
+
+        </tr>
+    </thead>
+
+    <tbody id="quotesRows"></tbody>
+
+</table>
         </div>
       </section>
     </main>

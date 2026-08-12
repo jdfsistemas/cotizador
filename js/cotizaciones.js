@@ -68,59 +68,748 @@
 
             data.quotes.forEach((quote) => {
 
+                const diasSolCot =
+                    quote.fecha_solicitud &&
+                    quote.fecha_envio_cotizacion
+                        ? Math.floor(
+                            (
+                                new Date(quote.fecha_envio_cotizacion) -
+                                new Date(quote.fecha_solicitud)
+                            ) / (1000 * 60 * 60 * 24)
+                        )
+                        : 0;
+
+                const diasPedidoEntrega =
+                    quote.fecha_envio_fabricacion &&
+                    quote.fecha_recibio_cliente
+                        ? Math.floor(
+                            (
+                                new Date(quote.fecha_recibio_cliente) -
+                                new Date(quote.fecha_envio_fabricacion)
+                            ) / (1000 * 60 * 60 * 24)
+                        )
+                        : 0;
+
                 quotesRows.innerHTML += `
                     <tr>
 
-                        <td class="cotizacion-hg">
-                    <strong>
-                    #${escapeHtml(quote.id)}
-                    </strong>
+                        <td>${escapeHtml(quote.codigo || "")}</td>
+
+                        <td>${escapeHtml(quote.cotizacion_num || quote.id || "")}</td>
+
+                        <td>${escapeHtml(quote.pais || "")}</td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.entrega_ok_cliente || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="entrega_ok_cliente"
+                                    ${quote.entrega_ok_cliente ? "disabled" : ""}
+                                    required>
+
+                                ${
+                                    quote.entrega_ok_cliente
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>${escapeHtml(quote.cliente || "")}</td>
+
+                        <td>${formatDate(quote.fecha_solicitud || "")}</td>
+
+                        <td>
+                        Troquel
+                        </td>
+
+                        <td>${escapeHtml(quote.producto || "")}</td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="date"
+                                    class="campo-fecha"
+                                    value="${quote.fecha_envio_cotizacion || ''}"
+                                    data-id="${quote.id}"
+                                    data-field="fecha_envio_cotizacion"
+                                    disabled
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-warning btn-sm btn-editar">
+
+                                    Editar
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.seguimiento_1 || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="seguimiento_1"
+                                    required>
+
+                                ${
+                                    quote.seguimiento_1
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.seguimiento_2 || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="seguimiento_2"
+                                    required>
+
+                                ${
+                                    quote.seguimiento_2
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="editor-cell">
+
+                                <input
+                                    type="date"
+                                    class="campo-fecha"
+                                    value="${quote.fecha_aprobacion || ''}"
+                                    data-id="${quote.id}"
+                                    data-field="fecha_aprobacion"
+                                    disabled
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-warning btn-sm btn-editar">
+
+                                    Editar
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="editor-cell">
+
+                                <input
+                                    type="date"
+                                    class="campo-fecha"
+                                    value="${quote.fecha_envio_fabricacion || ''}"
+                                    data-id="${quote.id}"
+                                    data-field="fecha_envio_fabricacion"
+                                    disabled
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-warning btn-sm btn-editar">
+
+                                    Editar
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="editor-cell">
+
+                                <input
+                                    type="date"
+                                    class="campo-fecha"
+                                    value="${quote.fecha_despachada_kocher || ''}"
+                                    data-id="${quote.id}"
+                                    data-field="fecha_despachada_kocher"
+                                    disabled
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-warning btn-sm btn-editar">
+
+                                    Editar
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                        <td>${escapeHtml(quote.calidad_troquel || "")}</td>
+
+                        <td>${escapeHtml(quote.valor_kocher || "")}</td>
+
+                        <td>${escapeHtml(quote.valor_hg || "")}</td>
+
+                        <td>
+
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.orden_servicio || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="orden_servicio"
+                                    ${quote.orden_servicio ? "disabled" : ""}
+                                    required>
+
+                                ${
+                                    quote.orden_servicio
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.placa_tool_id || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="placa_tool_id"
+                                    ${quote.placa_tool_id ? "disabled" : ""}
+                                    required>
+
+                                ${
+                                    quote.placa_tool_id
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.guia || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="guia"
+                                    required>
+
+                                ${
+                                    quote.guia
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.transportador || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="transportador"
+                                    required>
+
+                                ${
+                                    quote.transportador
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.factura_flete || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="factura_flete"
+                                    required>
+
+                                ${
+                                    quote.factura_flete
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.factura_kocher || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="factura_kocher"
+                                    required>
+
+                                ${
+                                    quote.factura_kocher
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.correo_facturacion || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="correo_facturacion"
+                                    required>
+
+                                ${
+                                    quote.correo_facturacion
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+                        
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.orden_compra || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="orden_compra"
+                                    required>
+
+                                ${
+                                    quote.orden_compra
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.factura_hg || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="factura_hg"
+                                    required>
+
+                                ${
+                                    quote.factura_hg    
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.observaciones_factura || "")}"
+                                    data-id="${quote.id}"
+                                    data-field="observaciones_factura"
+                                    required>
+
+                                ${
+                                    quote.observaciones_factura
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="editor-cell">
+
+                                <input
+                                    type="date"
+                                    class="campo-fecha"
+                                    value="${quote.fecha_recibio_cliente || ''}"
+                                    data-id="${quote.id}"
+                                    data-field="fecha_recibio_cliente"
+                                    disabled
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-warning btn-sm btn-editar">
+
+                                    Editar
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+
+                            <div class="editor-cell">
+
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="${escapeHtml(quote.observaciones|| "")}"
+                                    data-id="${quote.id}"
+                                    data-field="observaciones"
+                                    required>
+
+                                ${
+                                    quote.observaciones
+                                    ?
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-editar">
+
+                                        Editar
+
+                                    </button>
+                                    `
+                                    :
+                                    `
+                                    <button
+                                        type="button"
+                                        class="btn btn-success btn-sm btn-registrar">
+
+                                        Registrar
+
+                                    </button>
+                                    `
+                                }
+
+                            </div>
+
+                        </td>
+
+                        <td class="fw-bold text-center dias-sol-cot">
+                        ${diasSolCot}
                     </td>
 
-                        <td>
-                            ${formatDate(quote.quote_date)}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(quote.client)}
-                        </td>
-
-                        <td
-                        class="po-huella">
-                        ${escapeHtml(quote.po_huella)}
-                        </span>
-                        </td>
-
-                        <td>
-                            <strong>
-                                USD ${usd.format(quote.total_usd)}
-                            </strong>
-                        </td>
-
-                        <td class="text-center">
-
-                            <button
-                                class="btn btn-outline-primary btn-sm btn-ver-cotizacion"
-                                type="button"
-                                data-id="${quote.id}"
-                                title="Ver detalle">
-                                <i class="bi bi-eye"></i>
-                                Ver
-                            </button>
-
-                            <button
-                                class="btn btn-outline-success btn-sm btn-editar-cotizacion"
-                                type="button"
-                                data-id="${quote.id}"
-                                title="Editar cotización">
-                                <i class="bi bi-pencil"></i>
-                                Editar
-                            </button>
-
-                        </td>
-
+                    <td class="fw-bold text-center dias-pedido-entrega">
+                        ${diasPedidoEntrega}
+                    </td>
+                        
                     </tr>
-                `;
+                    `;
 
             });
 
@@ -741,6 +1430,167 @@ if (printBtn) {
             loadQuotes
         );
 
+document.addEventListener("click", function(event){
+
+    // EDITAR
+
+    if(event.target.classList.contains("btn-editar")){
+
+        const celda =
+            event.target.closest(".editor-cell");
+
+        const input =
+            celda.querySelector("input");
+
+        input.dataset.original =
+            input.value;
+
+        input.disabled = false;
+
+        event.target.remove();
+
+        celda.insertAdjacentHTML(
+            "beforeend",
+            `
+            <button
+                type="button"
+                class="btn btn-success btn-sm btn-guardar">
+
+                Registrar
+
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-danger btn-sm btn-cancelar">
+
+                X
+
+            </button>
+            `
+        );
+    }
+
+    // CANCELAR
+
+    if(event.target.classList.contains("btn-cancelar")){
+
+        const celda =
+            event.target.closest(".editor-cell");
+
+        const input =
+            celda.querySelector("input");
+
+        input.value =
+            input.dataset.original || "";
+
+        input.disabled = true;
+
+        celda.querySelector(".btn-guardar")?.remove();
+
+        celda.querySelector(".btn-cancelar")?.remove();
+
+        celda.querySelector(".btn-editar")?.remove();
+
+        celda.insertAdjacentHTML(
+            "beforeend",
+            `
+            <button
+                type="button"
+                class="btn btn-warning btn-sm btn-editar">
+
+                Editar
+
+            </button>
+            `
+        );
+
+    }
+
+    // GUARDAR
+
+    if(
+        event.target.classList.contains("btn-guardar") ||
+        event.target.classList.contains("btn-registrar")
+    ){
+
+        const celda =
+            event.target.closest(".editor-cell");
+
+        const input =
+            celda.querySelector("input");
+
+        const id =
+            input.dataset.id;
+
+        const campo =
+            input.dataset.field;
+
+        const valor =
+            input.value;
+
+        if(!valor.trim()){
+
+    input.focus();
+
+    input.style.borderColor = "#dc3545";
+
+    return;
+
+    }
+
+        fetch(
+            "api/actualizar_detalle_cotizacion.php",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id,
+                    campo,
+                    valor
+                })
+            }
+        )
+        .then(response => response.json())
+        .then(data => {
+
+            if(data.error){
+
+                console.error("Error:", data.error);
+
+                return;
+
+            }
+
+            input.disabled = true;
+
+            celda.querySelector(".btn-guardar")?.remove();
+            celda.querySelector(".btn-cancelar")?.remove();
+            celda.querySelector(".btn-registrar")?.remove();
+            celda.querySelector(".btn-editar")?.remove();
+
+            celda.insertAdjacentHTML(
+                "beforeend",
+                `
+                <button
+                    type="button"
+                    class="btn btn-warning btn-sm btn-editar">
+
+                    Editar
+
+                </button>
+                `
+            );
+
+            loadQuotes();
+
+        })
+
+    }
+
+});        
 
     // =====================================================
     // INICIAR

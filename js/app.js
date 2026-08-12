@@ -1365,30 +1365,31 @@ if (form.elements.billTo) {
 }
 
 
-document
-  .querySelector("#addItemButton")
-  .addEventListener(
+const addItemButton =
+  document.querySelector("#addItemButton");
+
+if (addItemButton) {
+
+  addItemButton.addEventListener(
     "click",
     () => {
 
       addItemRow();
 
       calculate();
+
     }
   );
 
-
-document
-  .querySelector("#saveQuoteButton")
-  .addEventListener(
-    "click",
-    saveQuote
-  );
+}
 
 
-document
-  .querySelector("#resetButton")
-  .addEventListener(
+const resetButton =
+  document.querySelector("#resetButton");
+
+if (resetButton) {
+
+  resetButton.addEventListener(
     "click",
     () => {
 
@@ -1397,8 +1398,7 @@ document
           ".quote-item:not([data-initial])"
         )
         .forEach(
-          (row) =>
-            row.remove()
+          (row) => row.remove()
         );
 
       itemCounter = 3;
@@ -1413,6 +1413,8 @@ document
       calculate();
     }
   );
+
+}
 
 
 const printButton =

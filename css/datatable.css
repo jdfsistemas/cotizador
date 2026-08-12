@@ -12,24 +12,17 @@
 
 }
 
-#tablaCotizaciones thead{
 
-    background:#044597;
+#tablaCotizaciones thead th {
 
-}
+    background: #0b4ea2 !important;
+    color: #fff !important;
 
-#tablaCotizaciones thead th{
+    text-align: center !important;
+    vertical-align: middle !important;
 
-    color:white;
-
-    font-weight:600;
-
-    text-transform:uppercase;
-
-    border:none;
-
-    padding:15px;
-
+    border-right: 1px solid #00a3b7 !important;
+    border-left: 1px solid #00a3b7 !important;
 }
 
 #tablaCotizaciones tbody td{
@@ -700,4 +693,110 @@
 
     }
 
+}
+
+/* INPUTS DE LA GRILLA */
+
+#tablaCotizaciones input,
+#tablaCotizaciones select,
+#tablaCotizaciones textarea {
+
+    width: 100%;
+
+    min-width: 120px;
+
+    border: 1px solid #ced4da;
+
+    border-radius: 6px;
+
+    padding: 6px 10px;
+
+    font-size: 13px;
+
+    background: #fff;
+
+    transition: .2s;
+}
+
+/* FECHAS */
+
+#tablaCotizaciones input[type="date"] {
+
+    min-width: 140px;
+
+    text-align: center;
+}
+
+/* TEXTAREAS */
+
+#tablaCotizaciones textarea {
+
+    resize: vertical;
+
+    min-height: 60px;
+}
+
+/* FOCUS */
+
+#tablaCotizaciones input:focus,
+#tablaCotizaciones select:focus,
+#tablaCotizaciones textarea:focus {
+
+    border-color: #00a3b7;
+
+    box-shadow:
+        0 0 0 3px rgba(0,163,183,.15);
+
+    outline: none;
+}
+
+.editor-cell{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+}
+
+.editor-cell input{
+
+    width:130px !important;
+
+    min-width:80px !important;
+}
+
+.editor-cell .btn{
+
+    white-space:nowrap;
+
+    padding:4px 10px;
+}
+
+.btn-editar{
+
+    padding: 4px 10px !important;
+
+    font-size: 12px !important;
+
+    white-space: nowrap;
+}
+
+.campo-fecha:disabled{
+
+    background:#f3f4f6 !important;
+
+    color:#495057;
+
+    opacity:1;
+}
+
+
+.btn-registrar{
+
+    padding: 4px 10px !important;
+
+    font-size: 12px !important;
+
+    white-space: nowrap;
 }
