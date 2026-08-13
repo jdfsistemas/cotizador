@@ -819,33 +819,32 @@
             // =================================================
 
             tabla = $("#tablaCotizaciones").DataTable({
-            
 
-                pageLength: 25,
+                    pageLength: 25,
 
-                order: [
-                    [0, "asc"]
-                ],
+                    order: [
+                        [1, "asc"]
+                    ],
 
-                responsive: true,
+                    scrollX: true,
 
-                dom:
-                `rt<'row mt-3'<'col-md-6'l i><'col-md-6'p>>`,
+                    responsive: false,
 
-                language: {
+                    dom:
+                        `rt<'row mt-3'<'col-md-6'l i><'col-md-6'p>>`,
 
-                    url:
-                        "https://cdn.datatables.net/plug-ins/2.3.3/i18n/es-ES.json",
+                    language: {
+                        url:
+                            "https://cdn.datatables.net/plug-ins/2.3.3/i18n/es-ES.json",
 
-                    lengthMenu:
-                        "Mostrar _MENU_",
+                        lengthMenu:
+                            "Mostrar _MENU_",
 
-                    info:
-                        "Mostrando _START_ a _END_"
+                        info:
+                            "Mostrando _START_ a _END_ de _TOTAL_"
+                    }
 
-                }
-
-            });
+                });
 
             document
             .getElementById("buscarCotizacion")

@@ -15,7 +15,6 @@ try {
         INNER JOIN cotizaciones c
             ON c.cotizacion_num = d.cotizacion_num
         ORDER BY d.cotizacion_num ASC
-        LIMIT 50
     ";
 
     $stmt = $conexion->prepare($sql);
