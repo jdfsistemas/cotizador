@@ -69,12 +69,25 @@ $basePath = $basePath ?? '';
 
         <div>
 
+        <?php
+            $poHuella = trim($quote['po'] ?? '');
+            $numeroCotizacion = trim((string)($quote['cotizacion_num'] ?? ''));
+
+            // Si el PO ya termina con el número de cotización,
+            // no lo volvemos a agregar.
+            if (
+                $numeroCotizacion !== '' &&
+                substr($poHuella, -strlen($numeroCotizacion)) === $numeroCotizacion
+            ) {
+                $poHuellaFinal = $poHuella;
+            } else {
+                $poHuellaFinal = $poHuella . $numeroCotizacion;
+            }
+            ?>
+
             <p>
                 <strong>PO Huella:</strong>
-                <?= htmlspecialchars(
-                    ($quote['po'] ?? '') .
-                    ($quote['cotizacion_num'] ?? '')
-                ) ?>
+                <?= htmlspecialchars($poHuellaFinal) ?>
             </p>
 
             <p>

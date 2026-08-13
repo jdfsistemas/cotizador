@@ -45,9 +45,62 @@ try {
     ], JSON_UNESCAPED_UNICODE);
 
     // Usuario por defecto si no hay sesión
-    $usuario      = $_SESSION["usuario_id"] ?? 1;
+    $usuario = $_SESSION["usuario_id"] ?? 1;
 
-    // Preparar INSERT ignorando el campo "id" para que MySQL lo autoincremente
+    // ID de cotización: si existe, estamos actualizando
+    $cotizacionId = !empty($data["id"])
+        ? intval($data["id"])
+        : null;
+
+// =====================================================
+// GUARDAR O ACTUALIZAR COTIZACIÓN
+// =====================================================
+
+if ($cotizacionId) {
+
+    $sql = "UPDATE cotizaciones SET
+                po = :po,
+                cliente = :cliente,
+                entregar_en = :entregar_en,
+                att = :att,
+                fecha = :fecha,
+                tiempo_entrega = :tiempo_entrega,
+                agente = :agente,
+                trm = :trm,
+                iva = :iva,
+                subtotal = :subtotal,
+                flete = :flete,
+                manejo = :manejo,
+                impuesto = :impuesto,
+                total = :total,
+                detalle_json = :detalle_json
+        WHERE cotizacion_num = :cotizacion_num";
+
+    $stmt = $conexion->prepare($sql);
+
+    $stmt->execute([
+        ":po"             => $po,
+        ":cliente"        => $cliente,
+        ":entregar_en"    => $entregarEn,
+        ":att"             => $att,
+        ":fecha"          => $fecha,
+        ":tiempo_entrega" => $tiempoEntrega,
+        ":agente"         => $agente,
+        ":trm"            => $trm,
+        ":iva"            => $iva,
+        ":subtotal"       => $subtotal,
+        ":flete"          => $flete,
+        ":manejo"         => $manejo,
+        ":impuesto"       => $impuesto,
+        ":total"          => $total,
+        ":detalle_json"   => $detalle,
+        ":cotizacion_num" => $cotizacionId
+    ]);
+
+    $cotizacionNum = $cotizacionId;
+
+} else {
+
     $sql = "INSERT INTO cotizaciones (
                 po, cliente, entregar_en, att, fecha, tiempo_entrega, agente,
                 trm, iva, subtotal, flete, manejo, impuesto, total,
@@ -61,25 +114,50 @@ try {
     $stmt = $conexion->prepare($sql);
 
     $stmt->execute([
-        ":po"            => $po,
-        ":cliente"       => $cliente,
-        ":entregar_en"   => $entregarEn,
-        ":att"           => $att,
-        ":fecha"         => $fecha,
-        ":tiempo_entrega"=> $tiempoEntrega,
-        ":agente"        => $agente,
-        ":trm"           => $trm,
-        ":iva"           => $iva,
-        ":subtotal"      => $subtotal,
-        ":flete"         => $flete,
-        ":manejo"        => $manejo,
-        ":impuesto"      => $impuesto,
-        ":total"         => $total,
-        ":detalle_json"  => $detalle,
-        ":usuario_id"    => $usuario
+        ":po"             => $po,
+        ":cliente"        => $cliente,
+        ":entregar_en"    => $entregarEn,
+        ":att"            => $att,
+        ":fecha"          => $fecha,
+        ":tiempo_entrega" => $tiempoEntrega,
+        ":agente"         => $agente,
+        ":trm"            => $trm,
+        ":iva"            => $iva,
+        ":subtotal"        => $subtotal,
+        ":flete"           => $flete,
+        ":manejo"         => $manejo,
+        ":impuesto"       => $impuesto,
+        ":total"           => $total,
+        ":detalle_json"   => $detalle,
+        ":usuario_id"     => $usuario
     ]);
 
     $cotizacionNum = $conexion->lastInsertId();
+}
+
+// =====================================================
+// ACTUALIZAR DETALLES DE LA COTIZACIÓN
+// =====================================================
+
+if ($cotizacionId) {
+
+    // Eliminar los detalles anteriores
+    $sqlEliminarDetalles = "
+        DELETE FROM cotizaciones_detalle
+        WHERE cotizacion_num = :cotizacion_num
+    ";
+
+    $stmtEliminarDetalles =
+        $conexion->prepare($sqlEliminarDetalles);
+
+    $stmtEliminarDetalles->execute([
+        ":cotizacion_num" => $cotizacionId
+    ]);
+}
+
+// =====================================================
+// INSERTAR DETALLES ACTUALES
+// =====================================================
 
 foreach ($items as $item) {
 
